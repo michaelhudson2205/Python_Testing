@@ -33,20 +33,33 @@ re.search(PATTERN_dt, line)
 file.close()
 # End Testing ==========
 
-enron_dt = []
+# Start of the good stuff ==========
+enron_data = []
 for email in emails:
     with open(email) as file:
         line = file.readline()
         line = file.readline()
+        lines = file.readlines()
 
     if re.search(PATTERN_dt, line):
         m1 = re.search(PATTERN_dt, line)
         enron_date = m1.group(1)
         enron_time = m1.group(2)
-        row_list = [enron_date, enron_time]
-        enron_dt.append(row_list)
+
+    count_fraud = 0
+    count_bankrupt = 0
+    for a in lines:
+        if re.search("the", a, re.IGNORECASE):
+            count_fraud += 1
+        if re.search("to", a, re.IGNORECASE):
+            count_bankrupt += 1
+
+    row_list = [enron_date, enron_time, count_fraud, count_bankrupt]
+    enron_data.append(row_list)
 
     file.close()
+
+# End of the good stuff ==========
 
 enron_dt[3000]
 len(enron_dt)
@@ -68,7 +81,10 @@ for a in lines:
         count_word += 1
 print(count_word)
 
-df = pd.DataFrame(enron_dt, columns=["Date", "Time"])
+df = pd.DataFrame(enron_data, columns=["Date", "Time", "F_count", "B_count"])
 print(df)
 
 df.dtypes
+
+print(enron_data)
+Total_Fraud = df["F_count"].sum()
