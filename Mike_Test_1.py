@@ -40,9 +40,9 @@ for email in emails:
         line = file.readline()
 
     if re.search(PATTERN_dt, line):
-        m = re.search(PATTERN_dt, line)
-        enron_date = m.group(1)
-        enron_time = m.group(2)
+        m1 = re.search(PATTERN_dt, line)
+        enron_date = m1.group(1)
+        enron_time = m1.group(2)
         row_list = [enron_date, enron_time]
         enron_dt.append(row_list)
 
@@ -63,7 +63,7 @@ count_word = 0
 line_number = 0
 for a in lines:
     line_number += 1
-    if re.search("the", a):
+    if re.search("now", a, re.IGNORECASE):
         print(f"Yes, found on line {line_number}")
         count_word += 1
 print(count_word)
